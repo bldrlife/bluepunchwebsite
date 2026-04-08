@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BluePunch: construction punch lists and takeoffs</title>
+  <meta name="description" content="BluePunch is a punch list and takeoff app for construction. Mark up PDF plans, run area and linear takeoffs, and export professional reports. One-time purchase, no subscription." />
+  <meta property="og:title" content="BluePunch: construction punch lists and takeoffs" />
+  <meta property="og:description" content="Punch lists, takeoffs, and PDF exports. $19.99 one-time. No subscription." />
+  <meta property="og:image" content="feature.png" />
+  <link rel="icon" href="icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c111b;
+      --surface: #151c2c;
+      --text: #d4d8e0;
+      --heading: #eef0f4;
+      --muted: #7a8494;
+      --accent: #4a90d9;
+      --border: rgba(255,255,255,0.07);
+      --max-w: 820px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,17,27,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 100%;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--heading); font-weight: 700;
+    }
+    .nav-brand:hover { text-decoration: none; }
+    .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--muted); font-size: 0.9rem; font-weight: 500;
+    }
+    .nav-links a:hover { color: var(--heading); text-decoration: none; }
+
+    /* CONTENT */
+    .content {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 {
+      font-size: 1.75rem; font-weight: 700; color: var(--heading);
+      line-height: 1.35; margin-bottom: 16px; letter-spacing: -0.02em;
+    }
+    .hero p {
+      margin-bottom: 14px; max-width: 600px;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      margin: 24px 0 12px;
+    }
+    .hero-actions a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px; font-weight: 600;
+      font-size: 0.9rem; transition: opacity 0.15s;
+    }
+    .hero-actions a:hover { text-decoration: none; opacity: 0.88; }
+    .dl-ios {
+      background: var(--accent); color: #fff;
+    }
+    .dl-android {
+      background: #01875f; color: #fff;
+    }
+    .hero-meta {
+      color: var(--muted); font-size: 0.85rem; margin-top: 8px;
+    }
+
+    /* BANNER */
+    .banner-wrap {
+      margin: 40px 0 0;
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .banner-wrap img { width: 100%; display: block; }
+
+    /* SECTIONS */
+    section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: none; }
+    section h2 {
+      font-size: 1.3rem; font-weight: 700; color: var(--heading);
+      margin-bottom: 16px; letter-spacing: -0.01em;
+    }
+    section h2 a { color: var(--heading); }
+    section h2 a:hover { text-decoration: underline; }
+    section p { margin-bottom: 12px; }
+    section ul, section ol {
+      margin: 0 0 16px 20px;
+    }
+    section li {
+      margin-bottom: 4px;
+    }
+
+    /* SCREENSHOTS CAROUSEL */
+    .ss-toggle {
+      display: inline-flex; gap: 2px;
+      background: var(--surface); border-radius: 8px;
+      padding: 3px; margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+    .ss-toggle button {
+      background: transparent; border: none; color: var(--muted);
+      font-family: inherit; font-size: 0.8rem; font-weight: 600;
+      padding: 6px 16px; border-radius: 6px; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ss-toggle button:hover { color: var(--text); }
+    .ss-toggle button.active {
+      background: var(--accent); color: #fff;
+    }
+    .ss-track {
+      display: none; overflow-x: auto; gap: 12px;
+      padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .ss-track::-webkit-scrollbar { display: none; }
+    .ss-track.active { display: flex; }
+    .ss-track img {
+      flex: 0 0 auto; height: 320px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      scroll-snap-align: start;
+    }
+    .ss-track.ss-ipad img { height: 380px; }
+    .ss-hint {
+      color: var(--muted); font-size: 0.8rem; margin-top: 8px;
+    }
+    @media (max-width: 600px) {
+      .ss-track img { height: 240px; }
+      .ss-track.ss-ipad img { height: 280px; }
+    }
+
+    /* FEATURE LIST */
+    .feature-list {
+      list-style: none; margin: 0; padding: 0;
+    }
+    .feature-list li {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      margin: 0;
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list strong {
+      color: var(--heading); display: block; margin-bottom: 2px;
+      font-size: 0.95rem;
+    }
+    .feature-list span {
+      font-size: 0.9rem;
+    }
+
+    /* TABLE */
+    .compare-wrap { overflow-x: auto; margin: 16px 0; }
+    table {
+      width: 100%; border-collapse: collapse; min-width: 480px;
+      font-size: 0.9rem;
+    }
+    thead th {
+      padding: 10px 14px; text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted);
+    }
+    thead th.col-bp { color: var(--accent); }
+    tbody td {
+      padding: 10px 14px; border-bottom: 1px solid var(--border);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody td:first-child { color: var(--muted); }
+    .col-bp { background: rgba(74,144,217,0.04); }
+    .val-bp { color: var(--accent); font-weight: 700; }
+    .val-yes { color: #5cb85c; font-weight: 600; }
+    .val-no { color: #555; }
+    .val-win { color: #5cb85c; font-weight: 700; }
+    .compare-note {
+      color: var(--muted); font-size: 0.78rem; margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    /* PRICING */
+    .pricing-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 32px;
+      max-width: 400px; margin: 20px 0;
+    }
+    .pricing-box .price {
+      font-size: 2.5rem; font-weight: 700; color: var(--heading);
+      line-height: 1; margin-bottom: 4px;
+    }
+    .pricing-box .price-sub {
+      color: var(--accent); font-weight: 600; font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+    .pricing-box ul {
+      list-style: none; margin: 0 0 24px; padding: 0;
+    }
+    .pricing-box li {
+      padding: 6px 0; color: var(--text); font-size: 0.9rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pricing-box li::before {
+      content: '✓'; color: #5cb85c; font-weight: 700; font-size: 0.85rem;
+    }
+    .pricing-box .dl-btn {
+      display: block; text-align: center;
+      background: var(--accent); color: #fff; font-weight: 700;
+      padding: 12px; border-radius: 8px; font-size: 0.9rem;
+      transition: opacity 0.15s;
+    }
+    .pricing-box .dl-btn:hover { opacity: 0.88; text-decoration: none; }
+    .pricing-box .dl-btn + .dl-btn {
+      margin-top: 8px; background: transparent;
+      border: 1px solid var(--border); color: var(--muted);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-brand {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--heading); font-weight: 600; font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .footer-brand:hover { text-decoration: none; }
+    .footer-brand img { width: 22px; height: 22px; border-radius: 5px; }
+    footer p { color: var(--muted); font-size: 0.8rem; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: var(--muted); font-size: 0.8rem; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .nav-links a.hide-mobile { display: none; }
+      .hero h1 { font-size: 1.4rem; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-brand" href="#">
+      <img src="icon.png" alt="" />
+      BluePunch
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="hide-mobile">Features</a>
+      <a href="#comparison" class="hide-mobile">Comparison</a>
+      <a href="#pricing" class="hide-mobile">Pricing</a>
+      <a href="tutorial.html" class="hide-mobile">Tutorial</a>
+      <a href="https://apps.apple.com/app/bluepunch/id6761277515" target="_blank">Download</a>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <h1>Construction punch lists and takeoffs. No subscription.</h1>
+      <p>
+        BluePunch is a punch list and takeoff app for general contractors and subcontractors.
+        Import any PDF plan set, place numbered punch items with photos and notes, run area,
+        linear, and count takeoffs, and export professional PDF reports — all from your phone or tablet.
+      </p>
+      <p>
+        It's a one-time purchase. <strong style="color:var(--heading)">$19.99</strong>, no subscription,
+        no account required, and it works completely offline. Available on iOS and Android.
+      </p>
+      <div class="hero-actions">
+        <a class="dl-ios" href="https://apps.apple.com/app/bluepunch/id6761277515" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store
+        </a>
+        <a class="dl-android" href="https://play.google.com/store/apps/details?id=com.bluetape" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c17.1-9.7 17.1-34.1-.1-60.8h-1.1zm-170.3 51.1L119.2 512l280.8-161.2-97.1-75.1z"/></svg>
+          Google Play
+        </a>
+      </div>
+      <p class="hero-meta">$19.99 one-time · No account required · Works offline</p>
+
+      <div class="banner-wrap">
+        <img src="feature.png" alt="BluePunch app showing punch list items on a construction plan" />
+      </div>
+    </div>
+
+    <!-- SCREENSHOTS -->
+    <section id="screenshots">
+      <h2>Screenshots</h2>
+      <p>Everything you need to distribute a punchlist or takeoff without leaving the jobsite.</p>
+
+      <div class="ss-toggle">
+        <button class="active" data-tab="iphone">iPhone</button>
+        <button data-tab="android">Android</button>
+        <button data-tab="ipad">iPad</button>
+      </div>
+
+      <div class="ss-track active" id="ss-iphone">
+        <img src="ss1.png" alt="Project list" />
+        <img src="ss2.png" alt="Punch point on plan" />
+        <img src="ss3.png" alt="Export settings" />
+        <img src="ss4.png" alt="PDF report preview" />
+        <img src="ss5.png" alt="Takeoff label picker" />
+        <img src="ss6.png" alt="Area takeoff" />
+        <img src="ss7.png" alt="Takeoff measurements" />
+        <img src="ss8.png" alt="Cloud revisions" />
+      </div>
+
+      <div class="ss-track" id="ss-android">
+        <img src="android-ss1.png" alt="Punch item on plan" />
+        <img src="android-ss2.png" alt="PDF export cover page" />
+        <img src="android-ss3.png" alt="PDF report detail" />
+        <img src="android-ss4.png" alt="Cloud revisions" />
+        <img src="android-ss5.png" alt="Takeoff area measurement" />
+        <img src="android-ss6.png" alt="Takeoff export" />
+        <img src="android-ss7.png" alt="Takeoff toolbar" />
+      </div>
+
+      <div class="ss-track ss-ipad" id="ss-ipad">
+        <img src="ipad-ss1.png" alt="iPad project list" />
+        <img src="ipad-ss2.png" alt="iPad punch item detail" />
+        <img src="ipad-ss3.png" alt="iPad export settings" />
+        <img src="ipad-ss4.png" alt="iPad PDF cover page" />
+        <img src="ipad-ss5.png" alt="iPad PDF report detail" />
+        <img src="ipad-ss6.png" alt="iPad takeoff entries" />
+        <img src="ipad-ss7.png" alt="iPad count takeoff" />
+        <img src="ipad-ss8.png" alt="iPad takeoff export config" />
+        <img src="ipad-ss9.png" alt="iPad takeoff summary" />
+        <img src="ipad-ss10.png" alt="iPad takeoff report" />
+      </div>
+
+      <p class="ss-hint">Scroll to see more →</p>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <h2><a href="#features">Features</a></h2>
+      <p>BluePunch combines punch lists and takeoffs in a single app. No learning curve — open your plan and start working.</p>
+
+      <ul class="feature-list">
+        <li>
+          <strong>Punch lists on PDF plans</strong>
+          <span>Tap anywhere on your PDF to drop a numbered marker. Add the responsible trade, a description, and a photo. Items are organized by trade for clean handoff.</span>
+        </li>
+        <li>
+          <strong>Area, linear, and count takeoffs</strong>
+          <span>Calibrate your plan scale once, then tap to measure rooms, runs, and item counts. Results are grouped by label with automatic subtotals. Tuned for standard 24×36 builder sets.</span>
+        </li>
+        <li>
+          <strong>Photo capture and markup</strong>
+          <span>Take a photo on site and annotate it with arrows, circles, and text. Annotations are burned into the image and included in the exported PDF report.</span>
+        </li>
+        <li>
+          <strong>Professional PDF export</strong>
+          <span>Export punch lists and takeoffs as branded PDF reports with your company logo, plan overview, photos, and items organized by trade. Share via email, AirDrop, or any app.</span>
+        </li>
+        <li>
+          <strong>iOS and Android</strong>
+          <span>Native apps on both platforms with iPad support. Your crew can use whatever device they carry.</span>
+        </li>
+        <li>
+          <strong>No account. Works offline.</strong>
+          <span>Everything stays on your device. No login, no server, no internet required. Open the app in a basement with no signal. It works.</span>
+        </li>
+      </ul>
+
+      <p>See the <a href="tutorial.html">tutorial</a> for a full walkthrough of every feature.</p>
+    </section>
+
+    <!-- COMPARISON -->
+    <section id="comparison">
+      <h2><a href="#comparison">Comparison</a></h2>
+      <p>Most construction software charges per user per month. BluePunch is a one-time purchase with no recurring fees.</p>
+
+      <div class="compare-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th class="col-bp">BluePunch</th>
+              <th>Bluebeam</th>
+              <th>Fieldwire</th>
+              <th>Procore</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Price</td>
+              <td class="col-bp val-bp">$19.99 once</td>
+              <td>$260–440/user/yr</td>
+              <td>From $39/user/mo</td>
+              <td>From ~$4,500/yr</td>
+            </tr>
+            <tr>
+              <td>Punch Lists</td>
+              <td class="col-bp val-yes">✓</td>
+              <td class="val-yes">✓</td>
+              <td class="val-yes">✓</td>
+              <td class="val-yes">✓</td>
+            </tr>
+            <tr>
+              <td>Takeoffs</td>
+              <td class="col-bp val-yes">✓</td>
+              <td class="val-yes">✓</td>
+              <td>Basic</td>
+              <td class="val-yes">✓</td>
+            </tr>
+            <tr>
+              <td>Mobile App</td>
+              <td class="col-bp val-yes">iOS + Android</td>
+              <td>Limited</td>
+              <td class="val-yes">✓</td>
+              <td class="val-yes">✓</td>
+            </tr>
+            <tr>
+              <td>Works Offline</td>
+              <td class="col-bp val-yes">✓</td>
+              <td>With sync</td>
+              <td class="val-yes">✓</td>
+              <td>Partial</td>
+            </tr>
+            <tr>
+              <td>Account Required</td>
+              <td class="col-bp val-win">No</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Annual Cost (1 user)</td>
+              <td class="col-bp val-win">$19.99 total</td>
+              <td>$260–440</td>
+              <td>$468+</td>
+              <td>$4,500+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-note">
+        Pricing based on publicly available data as of 2026. Bluebeam reflects annual subscription tiers.
+        Fieldwire reflects Pro tier with annual billing. Procore uses volume-based pricing.
+        Contact each vendor for current quotes.
+      </p>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing">
+      <h2><a href="#pricing">Pricing</a></h2>
+      <p>One price. No tiers, no per-seat fees, no annual renewals.</p>
+
+      <div class="pricing-box">
+        <div class="price">$19.99</div>
+        <div class="price-sub">Pay once. Yours forever.</div>
+        <ul>
+          <li>Punch list on any PDF plan</li>
+          <li>Area, linear, and count takeoffs</li>
+          <li>Photo capture and markup</li>
+          <li>Professional PDF export with company logo</li>
+          <li>All future updates included</li>
+          <li>No account or internet required</li>
+          <li>iOS and Android</li>
+        </ul>
+        <a class="dl-btn" href="https://apps.apple.com/app/bluepunch/id6761277515" target="_blank">
+          Download on the App Store
+        </a>
+        <a class="dl-btn" href="https://play.google.com/store/apps/details?id=com.bluetape" target="_blank">
+          Get it on Google Play
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <a class="footer-brand" href="#">
+        <img src="icon.png" alt="" />
+        BluePunch
+      </a>
+      <p>© 2025 BluePunch</p>
+      <div class="footer-links">
+        <a href="tutorial.html">Tutorial</a>
+        <a href="https://bldrlife.github.io/bluetape-privacy/" target="_blank">Privacy Policy</a>
+        <a href="mailto:dt-construction@port87.com">Support</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.querySelectorAll('.ss-toggle button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.ss-toggle button').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.ss-track').forEach(function(g) { g.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById('ss-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

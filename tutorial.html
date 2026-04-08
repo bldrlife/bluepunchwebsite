@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BluePunch — Tutorial</title>
+  <meta name="description" content="Complete tutorial for BluePunch. Learn how to create punch lists, run takeoffs, markup photos, and export professional PDF reports." />
+  <link rel="icon" href="icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c111b;
+      --surface: #151c2c;
+      --text: #d4d8e0;
+      --heading: #eef0f4;
+      --muted: #7a8494;
+      --accent: #4a90d9;
+      --border: rgba(255,255,255,0.07);
+      --max-w: 820px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,17,27,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--heading); font-weight: 700;
+    }
+    .nav-brand:hover { text-decoration: none; }
+    .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--muted); font-size: 0.9rem; font-weight: 500;
+    }
+    .nav-links a:hover { color: var(--heading); text-decoration: none; }
+
+    /* CONTENT */
+    .content {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HEADER */
+    .page-header {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header h1 {
+      font-size: 1.75rem; font-weight: 700; color: var(--heading);
+      letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .page-header p {
+      color: var(--text); max-width: 600px;
+    }
+
+    /* TOC */
+    .toc {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toc h2 {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 16px;
+    }
+    .toc ol {
+      list-style: none; counter-reset: toc; margin: 0; padding: 0;
+    }
+    .toc li {
+      counter-increment: toc; margin-bottom: 4px;
+    }
+    .toc li a {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--text); font-size: 0.9rem; font-weight: 500;
+      padding: 4px 0;
+    }
+    .toc li a::before {
+      content: counter(toc); font-size: 0.7rem; font-weight: 700;
+      color: var(--accent); background: rgba(74,144,217,0.1);
+      width: 22px; height: 22px; border-radius: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .toc li a:hover { color: var(--accent); text-decoration: none; }
+
+    /* SECTIONS */
+    .guide-section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .guide-section:last-of-type { border-bottom: none; }
+    .guide-section h2 {
+      font-size: 1.3rem; font-weight: 700; color: var(--heading);
+      margin-bottom: 16px; letter-spacing: -0.01em;
+    }
+    .guide-section h2 a { color: var(--heading); }
+    .guide-section h2 a:hover { text-decoration: underline; }
+    .guide-section h3 {
+      font-size: 1.05rem; font-weight: 700; color: var(--heading);
+      margin: 32px 0 10px;
+    }
+    .guide-section h4 {
+      font-size: 0.95rem; font-weight: 600; color: var(--heading);
+      margin: 24px 0 8px;
+    }
+    .guide-section p { margin-bottom: 12px; }
+    .guide-section ul, .guide-section ol {
+      margin: 0 0 16px 20px;
+    }
+    .guide-section li { margin-bottom: 6px; }
+    .guide-section strong { color: var(--heading); }
+
+    /* SCREENSHOTS */
+    .tut-img {
+      margin: 24px 0;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      max-width: 360px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      cursor: zoom-in;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .tut-img:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(74,144,217,0.2);
+    }
+    .tut-img img {
+      width: 100%; display: block;
+    }
+    .tut-img-wide {
+      max-width: 100%;
+    }
+
+    /* LIGHTBOX */
+    .lightbox-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    .lightbox-overlay.active { display: flex; }
+    .lightbox-overlay img {
+      max-width: 92vw; max-height: 92vh;
+      border-radius: 12px;
+      box-shadow: 0 16px 64px rgba(0,0,0,0.6);
+      pointer-events: none;
+    }
+    .lightbox-close {
+      position: fixed; top: 20px; right: 24px;
+      font-size: 2rem; color: #fff; opacity: 0.7;
+      cursor: pointer; line-height: 1; background: none; border: none;
+      z-index: 1001;
+    }
+    .lightbox-close:hover { opacity: 1; }
+
+    /* INLINE SCREENSHOTS ROW */
+    .tut-row {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .tut-row .tut-img-placeholder {
+      flex: 1; min-width: 200px; margin: 0;
+    }
+
+    /* TIP CALLOUT */
+    .tip {
+      background: rgba(74,144,217,0.08);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px; margin: 18px 0;
+    }
+    .tip p { color: var(--text); font-size: 0.9rem; margin: 0; }
+    .tip strong { color: var(--accent); }
+
+    /* KEY TABLE */
+    .key-table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.9rem;
+    }
+    .key-table th {
+      text-align: left; padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted); font-size: 0.75rem;
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .key-table td {
+      padding: 8px 12px; border-bottom: 1px solid var(--border);
+    }
+    .key-table td:first-child { color: var(--heading); font-weight: 600; }
+
+    /* FOOTER */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer p { color: var(--muted); font-size: 0.8rem; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: var(--muted); font-size: 0.8rem; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .nav-links a.hide-mobile { display: none; }
+      .page-header h1 { font-size: 1.4rem; }
+      .tut-img, .tut-img-placeholder { max-width: 100%; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html">
+      <img src="icon.png" alt="" />
+      BluePunch
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="hide-mobile">Home</a>
+      <a href="https://apps.apple.com/app/bluepunch/id6761277515" target="_blank">Download</a>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <div class="page-header">
+      <h1>Tutorial</h1>
+      <p>Complete guide to using BluePunch for punch lists, takeoffs, photo markup, and PDF export. Covers every feature on iOS, Android, and iPad.</p>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="toc">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#projects">Projects and PDF import</a></li>
+        <li><a href="#plan-viewer">Plan viewer</a></li>
+        <li><a href="#punch-list">Punch list mode</a></li>
+        <li><a href="#point-detail">Point detail and editing</a></li>
+        <li><a href="#photo-markup">Photo capture and markup</a></li>
+        <li><a href="#takeoff-mode">Takeoff mode</a></li>
+        <li><a href="#calibration">Calibrating the plan scale</a></li>
+        <li><a href="#area-tool">Area tool</a></li>
+        <li><a href="#linear-tool">Linear tool</a></li>
+        <li><a href="#count-tool">Count tool</a></li>
+        <li><a href="#cloud-tool">Cloud / revision tool</a></li>
+        <li><a href="#select-tool">Select tool</a></li>
+        <li><a href="#labels-colors">Labels, trades, and colors</a></li>
+        <li><a href="#entries">Entries panel</a></li>
+        <li><a href="#takeoff-settings">Takeoff settings</a></li>
+        <li><a href="#punch-export">Punch list export</a></li>
+        <li><a href="#settings">App settings</a></li>
+        <li><a href="#filename">File name customization</a></li>
+        <li><a href="#tips">Tips and shortcuts</a></li>
+      </ol>
+    </div>
+
+    <!-- 1. PROJECTS -->
+    <section class="guide-section" id="projects">
+      <h2><a href="#projects">1. Projects and PDF import</a></h2>
+
+      <p>When you open BluePunch, you see the project list. Each project corresponds to one PDF plan set.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-project-list.png" alt="Project list screen showing existing projects with names and dates" loading="lazy" />
+      </div>
+
+      <h3>Creating a project</h3>
+      <p>Tap the <strong>+</strong> button in the bottom right corner. This opens the system file picker where you can select any PDF from your device, iCloud Drive, Google Drive, Dropbox, or any other connected storage provider.</p>
+
+      <p>Once you select a PDF, BluePunch creates the project immediately. The project name defaults to the PDF filename, and all pages in the PDF are imported automatically.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-import-picker.png" alt="System file picker showing PDF files to import" loading="lazy" />
+      </div>
+
+      <h3>Opening from another app</h3>
+      <p>You can also open a PDF directly from email, a browser, or the Files app. Use the system Share menu or "Open in" option to send the PDF to BluePunch. The project is created automatically.</p>
+
+      <h3>Renaming a project</h3>
+      <p>Long-press a project in the list to rename it. The name is used on the cover page of exported reports.</p>
+
+      <h3>Deleting a project</h3>
+      <p>Swipe left on a project to delete it. This permanently removes all punch items, takeoff measurements, photos, and settings associated with that project.</p>
+
+      <div class="tip">
+        <p><strong>Tip:</strong> BluePunch is designed for standard 24×36 builder plan sets (ARCH D). Larger commercial sets (36×48 / ARCH E) and smaller residential sets (18×24 / ARCH C) also work — just make sure to calibrate your scale correctly.</p>
+      </div>
+    </section>
+
+    <!-- 2. PLAN VIEWER -->
+    <section class="guide-section" id="plan-viewer">
+      <h2><a href="#plan-viewer">2. Plan viewer</a></h2>
+
+      <p>Tapping a project opens the plan viewer. This is where all work happens — punch lists, takeoffs, and exports are all accessed from this screen.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-plan-viewer.png" alt="Full plan viewer screen showing PDF plan with toolbar at top, page navigation, and points list at bottom" loading="lazy" />
+      </div>
+
+      <h3>Screen layout</h3>
+      <p>The plan viewer has four areas:</p>
+      <ul>
+        <li><strong>Top bar</strong> — project name, mode toggle button, and EXPORT button.</li>
+        <li><strong>Page navigation bar</strong> — zoom percentage display, left/right arrows to switch pages, and "Page X of Y" indicator. In takeoff mode, a gear icon opens takeoff settings. In punch list mode, a trash icon lets you clear all items.</li>
+        <li><strong>Plan area</strong> — your PDF rendered at full resolution. Pinch to zoom, drag to pan.</li>
+        <li><strong>Bottom panel</strong> — in punch list mode, shows your punch items. In takeoff mode, shows tool controls and status.</li>
+      </ul>
+
+      <h3>Navigating pages</h3>
+      <p>Use the <strong>left/right arrows</strong> in the page navigation bar to move between pages. Each page maintains its own set of punch items and takeoff measurements independently.</p>
+
+      <h3>Zooming</h3>
+      <p>Pinch with two fingers to zoom in and out. The current zoom percentage is displayed in the top-left of the page navigation bar. Double-tap to quickly zoom into an area.</p>
+    </section>
+
+    <!-- 3. PUNCH LIST MODE -->
+    <section class="guide-section" id="punch-list">
+      <h2><a href="#punch-list">3. Punch list mode</a></h2>
+
+      <p>Punch list mode is the default when you open a project. Tap anywhere on the plan to place a numbered marker.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-punch-matkers.png" alt="Plan view with several numbered punch markers placed on the drawing" loading="lazy" />
+      </div>
+
+      <h3>Placing a punch item</h3>
+      <ol>
+        <li>Tap anywhere on the plan. A numbered blue marker appears at that location.</li>
+        <li>The point detail sheet opens automatically so you can add notes, a trade, and a photo.</li>
+        <li>Tap <strong>Done</strong> or swipe down to close the detail sheet. The item is saved.</li>
+      </ol>
+
+      <h3>Points list</h3>
+      <p>All punch items for the current page appear in the scrollable list at the bottom of the screen. Each row shows the item number, trade, and notes preview. Tap any row to reopen its detail sheet.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-points-list.png" alt="Bottom panel showing the scrollable punch list with item numbers, trades, and note previews" loading="lazy" />
+      </div>
+
+      <h3>Empty state</h3>
+      <p>When no items have been placed on the current page, the bottom panel shows "Tap on plan to add items" as a hint.</p>
+
+      <h3>Clearing all items</h3>
+      <p>Tap the <strong>trash icon</strong> in the page navigation bar to clear all punch list items for the entire project. This requires two confirmations to prevent accidental deletion. Make sure you have exported your punch list before clearing.</p>
+    </section>
+
+    <!-- 4. POINT DETAIL -->
+    <section class="guide-section" id="point-detail">
+      <h2><a href="#point-detail">4. Point detail and editing</a></h2>
+
+      <p>The point detail sheet is where you add all the information for a single punch item.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-point-detail.png" alt="Point detail sheet showing item number, photo area, trade field, and notes field" loading="lazy" />
+      </div>
+
+      <h3>Fields</h3>
+      <table class="key-table">
+        <thead><tr><th>Field</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Item number</td><td>Assigned automatically in the order items are placed. Displayed as "Item 1", "Item 2", etc.</td></tr>
+          <tr><td>Photo</td><td>Tap the camera area to capture a photo. After capturing, the markup editor opens automatically so you can annotate the photo before saving. Tap an existing photo to reopen the markup editor.</td></tr>
+          <tr><td>Trade</td><td>The responsible subcontractor — Plumber, Electrician, Painter, HVAC, etc. Includes autocomplete from previously used trades and trades saved in Settings.</td></tr>
+          <tr><td>Notes</td><td>Free-text description of the issue. This appears in the exported PDF report under each item.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Trade autocomplete</h3>
+      <p>As you type in the trade field, BluePunch shows suggestions from your trade list (up to five matches). Tap a suggestion to fill it in. You can also type a new trade name that hasn't been used before. The last trade you used is remembered and pre-filled on the next item.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-trade-picker.png" alt="Trade autocomplete dropdown showing suggestions" loading="lazy" />
+      </div>
+
+      <h3>Deleting a punch item</h3>
+      <p>Open the detail sheet and tap <strong>Delete</strong> at the bottom. The marker is removed from the plan and all remaining items are renumbered automatically.</p>
+    </section>
+
+    <!-- 5. PHOTO MARKUP -->
+    <section class="guide-section" id="photo-markup">
+      <h2><a href="#photo-markup">5. Photo capture and markup</a></h2>
+
+      <p>Every punch item can include a photo with annotations. Photos are captured directly from the point detail sheet.</p>
+
+      <h3>Taking a photo</h3>
+      <p>In the point detail sheet, tap the <strong>camera area</strong> (or the camera icon if no photo exists). This opens your device camera. After capturing the photo, a timestamp is automatically added to the image, and the markup editor opens immediately so you can annotate the photo before saving it.</p>
+
+      <h3>Markup editor</h3>
+      <p>Tap an attached photo to open the full-screen markup editor. This is where you annotate photos with arrows, shapes, and text.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-markup-editor.png" alt="Full-screen markup editor showing a construction photo with annotation tools" loading="lazy" />
+      </div>
+
+      <h3>Markup tools</h3>
+      <p>The top toolbar has four drawing tools, and the color bar sits directly below it:</p>
+      <table class="key-table">
+        <thead><tr><th>Tool</th><th>How to use</th></tr></thead>
+        <tbody>
+          <tr><td>Arrow</td><td>Drag from start to end to draw an arrow pointing at an issue.</td></tr>
+          <tr><td>Draw (Freehand)</td><td>Draw freely with your finger. Use for irregular shapes or quick marks.</td></tr>
+          <tr><td>Circle</td><td>Drag to draw a circle highlighting a problem area.</td></tr>
+          <tr><td>Text</td><td>Tap anywhere on the photo to place a text label. Type your annotation text in the dialog that appears.</td></tr>
+          <tr><td>Undo</td><td>Remove the last annotation you drew. Disabled when there are no annotations.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Colors</h3>
+      <p>A color bar below the tools lets you pick the annotation color. Five colors are available: <strong>Red</strong> (default), <strong>Blue</strong>, <strong>Green</strong>, <strong>Yellow</strong>, and <strong>White</strong>. The selected color has a white ring around it.</p>
+
+      <p>When you tap <strong>Save</strong>, all annotations are permanently burned into the image. The annotated photo is included in your exported PDF report.</p>
+
+      <h3>Removing a photo</h3>
+      <p>In the point detail sheet, tap the <strong>minus button</strong> (blue circle) in the top-right corner of the photo to delete it.</p>
+
+      <div class="tip">
+        <p><strong>Tip:</strong> Red arrows on a close-up photo of the issue are the fastest way to communicate a problem to a subcontractor. One arrow is usually enough — keep it clean.</p>
+      </div>
+    </section>
+
+    <!-- 6. TAKEOFF MODE -->
+    <section class="guide-section" id="takeoff-mode">
+      <h2><a href="#takeoff-mode">6. Takeoff mode</a></h2>
+
+      <p>Takeoff mode lets you measure areas, linear distances, counts, and mark revision clouds directly on your plans.</p>
+
+      <h3>Switching modes</h3>
+      <p>Tap the <strong>mode toggle button</strong> in the top-right of the toolbar (the triangular takeoff icon). The toolbar changes to show takeoff tools at the bottom. Tap the <strong>clipboard icon</strong> (which replaces the takeoff icon) to return to punch list mode.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-takeoff-toolbar.png" alt="Takeoff mode toolbar showing all 7 tools: Select, Calibrate, Area, Linear, Cloud, Count, Pan" loading="lazy" />
+      </div>
+
+      <h3>Takeoff toolbar</h3>
+      <p>The bottom toolbar in takeoff mode contains seven tools, displayed left to right in this order:</p>
+      <table class="key-table">
+        <thead><tr><th>Tool</th><th>Icon</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Select</td><td>Dashed square with cursor</td><td>Tap to select measurements for editing or deletion</td></tr>
+          <tr><td>Calibrate</td><td>Crosshair scope</td><td>Set the plan scale by measuring a known distance</td></tr>
+          <tr><td>Area</td><td>Viewfinder</td><td>Measure area in square feet by placing polygon vertices</td></tr>
+          <tr><td>Linear</td><td>Ruler</td><td>Measure length in feet by placing points along a path</td></tr>
+          <tr><td>Cloud</td><td>Cloud</td><td>Drag to draw a revision cloud with annotation text</td></tr>
+          <tr><td>Count</td><td>Number</td><td>Count items by tapping directly on the plan</td></tr>
+          <tr><td>Pan</td><td>Hand</td><td>Scroll and zoom without accidentally placing points</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Action bar</h3>
+      <p>Above the toolbar, a status bar shows context-sensitive information: calibration status ("Pan to align Point 1"), current measurement in progress, number of points placed, etc. Action buttons on the right side change depending on the active tool:</p>
+      <ul>
+        <li><strong>+ button</strong> (orange) — places a point at the crosshair position (Calibrate, Area, Linear)</li>
+        <li><strong>✓ button</strong> (green) — confirms calibration or completes an area/linear measurement</li>
+        <li><strong>Undo button</strong> (orange) — removes the last placed point (Area, Linear)</li>
+        <li><strong>Label button</strong> (tag icon) — set or change the label and trade (Area, Linear, Cloud, Count)</li>
+        <li><strong>Shape toggle</strong> (square/pentagon) — switch between rectangle and polygon mode (Area only)</li>
+      </ul>
+
+      <h3>Crosshair</h3>
+      <p>When using the Calibrate, Area, or Linear tools, a crosshair appears on the plan to help you place points precisely. Drag the plan to position the crosshair exactly where you want, then tap the <strong>+ button</strong> in the action bar to confirm the point. This gives you much finer control than tapping directly, especially on dense plans. The crosshair automatically centers on the visible viewport when you switch to one of these tools.</p>
+    </section>
+
+    <!-- 7. CALIBRATION -->
+    <section class="guide-section" id="calibration">
+      <h2><a href="#calibration">7. Calibrating the plan scale</a></h2>
+
+      <p>Before running any takeoffs, you need to calibrate the plan scale so BluePunch knows the real-world size of the drawing.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-calibration-pins.png" alt="Plan view showing two calibration pins placed on a known dimension line" loading="lazy" />
+      </div>
+
+      <h3>Steps</h3>
+      <ol>
+        <li>Select the <strong>Calibrate</strong> tool from the toolbar. The status bar says "Pan to align Point 1".</li>
+        <li>Drag the plan so the crosshair sits on one end of a known dimension (e.g., a wall dimension line). Tap the <strong>✓ button</strong>.</li>
+        <li>The status changes to "Pan to align Point 2". Move the crosshair to the other end of that same dimension. Tap <strong>✓</strong> again.</li>
+        <li>A calibration dialog appears asking for the real-world distance. Enter the measurement in <strong>feet and inches</strong> (e.g., 24 ft 0 in).</li>
+        <li>Tap <strong>Set Scale</strong>. The plan scale is calculated and saved to the project.</li>
+      </ol>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-calibration-dialog.png" alt="Calibration dialog with feet and inches input fields and Set Scale button" loading="lazy" />
+      </div>
+
+      <h3>Recalibrating</h3>
+      <p>You can recalibrate at any time by selecting the Calibrate tool and repeating the process. The new scale replaces the old one. All existing area and linear measurements across all pages are automatically recalculated using the new scale.</p>
+
+      <h3>Scale persistence</h3>
+      <p>The calibrated scale is saved to the project and applies to all pages. If your plan set has pages at different scales, recalibrate when you switch to a page with a different scale.</p>
+
+      <div class="tip">
+        <p><strong>Tip:</strong> Use the longest known dimension on the plan for calibration. Longer dimensions give more accurate scale calculations. Look for overall building dimensions or clearly marked reference lines.</p>
+      </div>
+    </section>
+
+    <!-- 8. AREA TOOL -->
+    <section class="guide-section" id="area-tool">
+      <h2><a href="#area-tool">8. Area tool</a></h2>
+
+      <p>The area tool measures enclosed areas in square feet. You define a polygon by placing vertices, and BluePunch calculates the enclosed area using the calibrated scale.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-area-polygon.png" alt="Plan view showing a completed area polygon with vertices and the calculated square footage label" loading="lazy" />
+      </div>
+
+      <h3>Placing vertices</h3>
+      <ol>
+        <li>Select the <strong>Area</strong> tool.</li>
+        <li>Position the crosshair at the first corner of the area you want to measure. Tap the <strong>+ button</strong>.</li>
+        <li>Move to each subsequent corner and tap <strong>+</strong> to place each vertex.</li>
+        <li>When you've placed all vertices (minimum 3), tap the <strong>✓ button</strong> to close the polygon. The area in square feet is calculated and displayed as a label inside the shape.</li>
+      </ol>
+
+      <h3>Rectangle mode</h3>
+      <p>Tap the <strong>shape toggle</strong> button (square icon in the action bar) to switch between polygon mode and rectangle mode. In rectangle mode, you only need to place two points — opposite corners — and BluePunch automatically creates a rectangle.</p>
+
+      <h3>Undo</h3>
+      <p>Tap <strong>Undo</strong> in the action bar to remove the last placed vertex before completing the shape.</p>
+
+      <div class="tip">
+        <p><strong>Tip:</strong> For L-shaped rooms, you can either trace the full L as a polygon, or measure two separate rectangles and add the areas manually.</p>
+      </div>
+    </section>
+
+    <!-- 9. LINEAR TOOL -->
+    <section class="guide-section" id="linear-tool">
+      <h2><a href="#linear-tool">9. Linear tool</a></h2>
+
+      <p>The linear tool measures distances along a path in feet and inches. Place points at each segment endpoint and BluePunch calculates the total length.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-linear-path.png" alt="Plan view showing a linear measurement path with total length displayed" loading="lazy" />
+      </div>
+
+      <h3>Placing points</h3>
+      <ol>
+        <li>Select the <strong>Linear</strong> tool.</li>
+        <li>Position the crosshair at the start of the run. Tap the <strong>+ button</strong>.</li>
+        <li>Move to the next point along the path. Tap <strong>+</strong>.</li>
+        <li>Continue placing points for each bend or corner in the path.</li>
+        <li>Tap the <strong>✓ button</strong> to complete the measurement. The total length in feet is displayed.</li>
+      </ol>
+
+      <h3>Use cases</h3>
+      <ul>
+        <li>Wall runs for baseboard or crown molding</li>
+        <li>Pipe and conduit lengths</li>
+        <li>Wiring runs</li>
+        <li>Fence lines and curbing</li>
+      </ul>
+    </section>
+
+    <!-- 10. COUNT TOOL -->
+    <section class="guide-section" id="count-tool">
+      <h2><a href="#count-tool">10. Count tool</a></h2>
+
+      <p>The count tool lets you count individual items on the plan by tapping each one. Each tap places a marker and increments the count.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-count-markers.png" alt="Plan view showing count markers on individual items with total count" loading="lazy" />
+      </div>
+
+      <h3>Counting items</h3>
+      <ol>
+        <li>Select the <strong>Count</strong> tool.</li>
+        <li>Tap directly on each item you want to count. A small colored marker appears at each tap location, and the count increments.</li>
+        <li>Continue tapping until all items are counted.</li>
+      </ol>
+
+      <p>Unlike the area and linear tools, count markers are placed immediately with each tap — there's no crosshair. This makes counting fast.</p>
+
+      <h3>Use cases</h3>
+      <ul>
+        <li>Outlets, switches, and light fixtures</li>
+        <li>Plumbing fixtures</li>
+        <li>Doors and windows</li>
+        <li>Structural columns</li>
+        <li>HVAC registers</li>
+      </ul>
+    </section>
+
+    <!-- 11. CLOUD TOOL -->
+    <section class="guide-section" id="cloud-tool">
+      <h2><a href="#cloud-tool">11. Cloud / revision tool</a></h2>
+
+      <p>The cloud tool draws a revision cloud rectangle with annotation text inside. Clouds are used to mark areas that need attention or have changed between revisions.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-cloud-revision.png" alt="Plan view showing a revision cloud with annotation text inside" loading="lazy" />
+      </div>
+
+      <h3>Drawing a cloud</h3>
+      <ol>
+        <li>Select the <strong>Cloud</strong> tool.</li>
+        <li>Drag on the plan to define the cloud rectangle. Drag from one corner to the opposite corner.</li>
+        <li>When you release, a text input sheet appears. Type the annotation text (e.g., "REVISED PER RFI #12", "HOLD FOR OWNER DECISION").</li>
+        <li>Tap <strong>Save</strong>. The cloud appears with the scalloped cloud border and your text centered inside.</li>
+      </ol>
+
+      <h3>Moving cloud text</h3>
+      <p>After placing a cloud, you can drag the text label to reposition it within or outside the cloud boundary. You can also drag the resize handles to adjust the text box size.</p>
+    </section>
+
+    <!-- 12. SELECT TOOL -->
+    <section class="guide-section" id="select-tool">
+      <h2><a href="#select-tool">12. Select tool</a></h2>
+
+      <p>The select tool lets you tap on existing takeoff measurements to select them for editing or deletion.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-select-tool.png" alt="Plan view showing a selected takeoff area with edit/delete buttons visible in the action bar" loading="lazy" />
+      </div>
+
+      <h3>Selecting items</h3>
+      <ol>
+        <li>Select the <strong>Select</strong> tool.</li>
+        <li>Tap on any area polygon, linear path, count marker, or cloud to select it. Selected items are highlighted.</li>
+        <li>Tap additional items to add them to the selection (multi-select).</li>
+      </ol>
+
+      <h3>Editing selected items</h3>
+      <p>With items selected, the action bar shows these buttons:</p>
+      <ul>
+        <li><strong>Delete</strong> (red trash icon) — permanently removes all selected measurements.</li>
+        <li><strong>A- / A+</strong> (font size buttons) — decrease or increase the label font size on selected items.</li>
+        <li><strong>Label</strong> (tag icon) — opens the label sheet to assign or change the label, trade, and color for all selected items at once.</li>
+      </ul>
+
+      <p>The status bar shows how many items are selected (e.g., "3 selected"). Tap empty space on the plan to deselect all.</p>
+    </section>
+
+    <!-- 13. LABELS AND COLORS -->
+    <section class="guide-section" id="labels-colors">
+      <h2><a href="#labels-colors">13. Labels, trades, and colors</a></h2>
+
+      <p>Every takeoff measurement belongs to a <strong>label</strong> and a <strong>trade</strong> (also called vendor). Labels help you organize your measurements into logical groups.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-label-sheet.png" alt="Label/trade editing sheet showing label name, trade name, and color picker grid" loading="lazy" />
+      </div>
+
+      <h3>Setting a label</h3>
+      <p>Before placing measurements, tap the <strong>Label</strong> button in the action bar to set the active label and trade. All subsequent measurements will be assigned to this label.</p>
+      <ul>
+        <li><strong>Label</strong> — the specific item name, e.g., "Kitchen Tile", "Gym Rubber Floor", "Can Lights".</li>
+        <li><strong>Trade</strong> — the vendor or trade responsible, e.g., "Collins Tile", "Division 9", "Atlas Electric".</li>
+      </ul>
+
+      <h3>Colors</h3>
+      <p>Each tool has a default color (green for Area, orange for Linear, red for Cloud, pink for Count), but you can change it. The color is set through the label sheet or through the color picker (accessible from the gear icon in the page navigation bar). The color picker shows a 4×3 grid of 12 preset colors.</p>
+
+      <h3>Custom colors</h3>
+      <p>Below the preset grid, a <strong>Custom Color</strong> picker uses the system color selector to let you create any color. Tap "Reset to Default" to restore the tool's original color. Long-press any custom color swatch to enter delete mode.</p>
+
+      <h3>Per-tool labels</h3>
+      <p>Each tool (Area, Linear, Count, Cloud) maintains its own active label and color independently. This means you can switch between tools without losing your label settings.</p>
+    </section>
+
+    <!-- 14. ENTRIES -->
+    <section class="guide-section" id="entries">
+      <h2><a href="#entries">14. Entries panel</a></h2>
+
+      <p>Tap the <strong>Entries</strong> button in the bottom status bar (next to the calibration status) to open the entries panel. This shows a grouped summary of all takeoff measurements across all pages.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-entries-panel.png" alt="Entries panel showing measurements grouped by trade and label with area/length/count subtotals" loading="lazy" />
+      </div>
+
+      <h3>Organization</h3>
+      <p>Entries are organized in a tree structure:</p>
+      <ul>
+        <li><strong>Top level:</strong> Trade / vendor name (e.g., "Collins Tile")</li>
+        <li><strong>Second level:</strong> Label name with measurement type and subtotal (e.g., "Kitchen Tile — 342 sqft")</li>
+        <li><strong>Individual entries:</strong> Each measurement with its page number and value</li>
+      </ul>
+
+      <p>Tap a trade header to collapse or expand its entries.</p>
+
+      <h3>Navigating to entries</h3>
+      <p>Long-press any individual entry to jump to its location on the plan. The viewer scrolls to center the measurement and switches to the correct page if needed.</p>
+
+      <h3>Hiding groups</h3>
+      <p>Tap the <strong>eye icon</strong> next to a trade or label to hide its measurements from the plan view. This is useful when overlapping measurements make the plan hard to read. Hidden groups are still included in exports unless you deselect them.</p>
+    </section>
+
+    <!-- 15. TAKEOFF SETTINGS -->
+    <section class="guide-section" id="takeoff-settings">
+      <h2><a href="#takeoff-settings">15. Takeoff settings</a></h2>
+
+      <p>Tap the <strong>gear icon</strong> in the page navigation bar (visible only in takeoff mode) to open takeoff display settings.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-takeoff-settings.png" alt="Takeoff settings sheet showing label scale sliders and dejitter toggle" loading="lazy" />
+      </div>
+
+      <h3>Label sizes</h3>
+      <table class="key-table">
+        <thead><tr><th>Setting</th><th>What it controls</th></tr></thead>
+        <tbody>
+          <tr><td>Area Label Scale</td><td>Size of the square footage labels inside area polygons</td></tr>
+          <tr><td>Linear Label Scale</td><td>Size of the length labels along linear measurements</td></tr>
+          <tr><td>Cloud Label Scale</td><td>Size of the text inside revision clouds</td></tr>
+        </tbody>
+      </table>
+
+      <p>Each setting has a slider ranging from 0.05 to 1.0. Smaller values make labels smaller, which is useful on dense plans where labels overlap.</p>
+
+      <h3>Dejitter</h3>
+      <p>The <strong>Dejitter (lift-off stabilization)</strong> toggle reduces accidental point drift when you lift your finger from the screen. Enabled by default. Disable it if you prefer raw touch input.</p>
+    </section>
+
+    <!-- 16. PUNCH EXPORT -->
+    <section class="guide-section" id="punch-export">
+      <h2><a href="#punch-export">16. Punch list export</a></h2>
+
+      <p>Tap <strong>EXPORT</strong> in the top-right corner while in punch list mode to open the export configuration screen.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-punch-export.png" alt="Punch list export settings screen showing cover page, layout, output, and trade filter options" loading="lazy" />
+      </div>
+
+      <h3>Cover page</h3>
+      <p>Toggle <strong>Include Cover Page</strong> to add a branded first page with your company logo, company name, project name, and date. Set your logo and company name in Settings before your first export.</p>
+
+      <h3>Layout options</h3>
+      <table class="key-table">
+        <thead><tr><th>Setting</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Plan View Only</td><td>Export only the plan overview with markers — no individual detail pages for each item. Good for a quick summary.</td></tr>
+          <tr><td>Items Per Page</td><td>Choose 1 or 2 items per page. 1 item per page gives more space for the plan crop and photo.</td></tr>
+          <tr><td>Plan Crop Scale</td><td>Slider (15%–100%) controlling how much of the plan is shown around each marker. 15% = tight close-up. 100% = full page view. A live preview updates as you drag.</td></tr>
+          <tr><td>Marker Size</td><td>Slider (4–16pt) controlling the size of numbered markers on the plan overview pages.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Output quality</h3>
+      <p>Choose <strong>Low</strong>, <strong>Medium</strong>, or <strong>High</strong> compression. Low compression produces smaller files. High compression produces larger, sharper files. Medium is recommended for most uses.</p>
+
+      <h3>Trade filter</h3>
+      <p>By default, all trades are included. Use the trade dropdown to export only items for a specific trade. This lets you generate separate reports per subcontractor — e.g., one PDF for the plumber, one for the electrician.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-punch-export-results.png" alt="Example of an exported punch list PDF showing cover page and a detail page with plan crop and photo" loading="lazy" />
+      </div>
+
+      <h3>Sharing</h3>
+      <p>Tap <strong>EXPORT</strong> to generate the PDF. A progress bar shows export status. When complete, the system share sheet opens so you can email, AirDrop, save to Files, or share via any installed app.</p>
+    </section>
+
+    <!-- 17. SETTINGS -->
+    <section class="guide-section" id="settings">
+      <h2><a href="#settings">17. App settings</a></h2>
+
+      <p>Tap the <strong>gear icon</strong> on the project list screen to open app settings.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-settings.png" alt="Settings screen showing Company, User, Trades, and File Name sections" loading="lazy" />
+      </div>
+
+      <h3>Company</h3>
+      <table class="key-table">
+        <thead><tr><th>Field</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Company Logo</td><td>Tap to select from photo library or import from Files. Appears on the cover page and header of every exported PDF page.</td></tr>
+          <tr><td>Company Name</td><td>Your company name as it should appear on reports.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>User</h3>
+      <table class="key-table">
+        <thead><tr><th>Field</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Your Name</td><td>"Prepared by" name on the cover page of exported reports.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Trades</h3>
+      <p>Manage your list of trades (subcontractor categories). These appear as autocomplete suggestions in the punch item detail sheet.</p>
+      <ul>
+        <li><strong>Add Trade</strong> — tap the + button to add a new trade name.</li>
+        <li><strong>Delete</strong> — tap the X next to a trade to remove it.</li>
+        <li><strong>Import</strong> — import a trades list from a text file (one trade per line).</li>
+        <li><strong>Export</strong> — export your current trades list as a text file to share with your team.</li>
+      </ul>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-settings-trades.png" alt="Trades section showing the expandable trade list with import/export buttons" loading="lazy" />
+      </div>
+
+      <div class="tip">
+        <p><strong>Tip:</strong> Set up your trades list once and export it. Then import it on every team member's device so everyone uses the same trade names. This keeps your reports consistent.</p>
+      </div>
+    </section>
+
+    <!-- 18. FILENAME -->
+    <section class="guide-section" id="filename">
+      <h2><a href="#filename">18. File name customization</a></h2>
+
+      <p>At the bottom of Settings, you can configure how exported PDF files are named.</p>
+
+      <div class="tut-img" onclick="openLightbox(this.querySelector('img'))">
+        <img src="tutorialscreenshots/tut-filename-config.png" alt="File name configuration showing draggable/toggleable fields and a filename preview" loading="lazy" />
+      </div>
+
+      <h3>Available fields</h3>
+      <p>The filename is built from seven fields that you can reorder, enable, or disable. All are enabled by default except Custom:</p>
+      <ul>
+        <li><strong>Project Name</strong> — the project title</li>
+        <li><strong>Company Name</strong> — your company name from settings</li>
+        <li><strong>Item Count</strong> — total number of items (e.g., "(12) Items")</li>
+        <li><strong>Trade</strong> — the trade filter used for the export</li>
+        <li><strong>Date</strong> — the export date and time</li>
+        <li><strong>User Name</strong> — your name from settings</li>
+        <li><strong>Custom</strong> — any custom text you type in (disabled by default)</li>
+      </ul>
+
+      <h3>Reordering</h3>
+      <p>Drag the handle on the right side of each field to change the order. The filename preview at the bottom updates in real-time.</p>
+
+      <h3>Toggling</h3>
+      <p>Tap the circle checkbox next to each field to include or exclude it from the filename.</p>
+
+      <h3>Reset</h3>
+      <p>Tap <strong>Reset to Default</strong> to restore the original filename format.</p>
+    </section>
+
+    <!-- 19. TIPS -->
+    <section class="guide-section" id="tips">
+      <h2><a href="#tips">19. Tips and shortcuts</a></h2>
+
+      <ul>
+        <li><strong>Pinch to zoom</strong> — two-finger pinch on the plan viewer for deep zoom on high-resolution PDFs.</li>
+        <li><strong>Double-tap to zoom</strong> — quickly zoom into a specific area.</li>
+        <li><strong>Pan tool</strong> — in takeoff mode, switch to the Pan tool to scroll around without accidentally placing points.</li>
+        <li><strong>Rectangle mode</strong> — for quick rectangular areas, toggle rectangle mode so you only need two corner taps instead of four.</li>
+        <li><strong>Export by trade</strong> — generate separate punch list reports per trade so each sub only sees their own items.</li>
+        <li><strong>Per-page calibration</strong> — each page in a multi-page plan set can have its own scale. Calibrate each page independently for mixed-scale drawings.</li>
+        <li><strong>Dejitter</strong> — if you find that points are slightly off from where you tapped, make sure dejitter is enabled in takeoff settings.</li>
+        <li><strong>Long-press entries</strong> — long-press any entry in the takeoff entries panel to jump directly to that measurement on the plan.</li>
+        <li><strong>Hide overlapping groups</strong> — use the eye icon in the entries panel to temporarily hide groups from the plan view when things get cluttered.</li>
+        <li><strong>Custom colors</strong> — use the RGB sliders at the bottom of the color picker to create custom colors for your labels. Helps keep different material types visually distinct.</li>
+        <li><strong>Backup your work</strong> — all data is stored locally on your device. Make sure your device backups are enabled (iCloud Backup or equivalent).</li>
+        <li><strong>Multi-page plan sets</strong> — all measurements and punch items are stored per-page. Navigate with the left/right arrows in the page bar.</li>
+        <li><strong>Company logo</strong> — set your company logo in Settings before your first export. It appears on the cover page and header of every PDF page.</li>
+        <li><strong>Filename customization</strong> — configure your export filename format once in Settings. It applies to all future exports.</li>
+      </ul>
+
+      <div class="tip">
+        <p><strong>Need help?</strong> Contact us at <a href="mailto:dt-construction@port87.com">dt-construction@port87.com</a>.</p>
+      </div>
+    </section>
+
+    <p style="margin: 40px 0; text-align: center;">
+      <a href="index.html" style="color: var(--accent); font-weight: 600;">← Back to BluePunch</a>
+    </p>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 BluePunch</p>
+      <div class="footer-links">
+        <a href="https://bldrlife.github.io/bluetape-privacy/" target="_blank">Privacy Policy</a>
+        <a href="mailto:dt-construction@port87.com">Support</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">×</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <script>
+    function openLightbox(imgEl) {
+      document.getElementById('lightbox-img').src = imgEl.src;
+      document.getElementById('lightbox-img').alt = imgEl.alt;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+
+</body>
+</html>
