@@ -167,6 +167,104 @@
       .ss-track.ss-ipad img { height: 280px; }
     }
 
+    /* GIF SHOWCASE */
+    .gif-section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+    .gif-section h2 {
+      font-size: 1.3rem; font-weight: 700; color: var(--heading);
+      margin-bottom: 6px; letter-spacing: -0.01em;
+    }
+    .gif-section > p {
+      color: var(--muted); margin-bottom: 32px; font-size: 0.95rem;
+    }
+    .gif-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .gif-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .gif-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(74,144,217,0.12);
+    }
+    .gif-card .gif-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      max-height: 480px;
+      background: linear-gradient(135deg, rgba(74,144,217,0.08) 0%, rgba(12,17,27,0.95) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .gif-card .gif-media img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: none;
+    }
+    .gif-card .gif-media img[src]:not([src=""]) {
+      display: block;
+    }
+    .gif-card .gif-media img[src]:not([src=""]) ~ .gif-placeholder-inner {
+      display: none;
+    }
+    .gif-placeholder-inner {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+      color: var(--muted);
+    }
+    .gif-placeholder-inner svg {
+      opacity: 0.25;
+    }
+    .gif-placeholder-inner span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.5;
+    }
+    .gif-card .gif-label {
+      padding: 16px 18px;
+      border-top: 1px solid var(--border);
+    }
+    .gif-card .gif-label h3 {
+      font-size: 0.92rem; font-weight: 700; color: var(--heading);
+      margin-bottom: 4px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .gif-card .gif-label p {
+      font-size: 0.82rem; color: var(--muted); line-height: 1.5;
+      margin: 0;
+    }
+    .rec-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(220,50,50,0.12); color: #e05555;
+      font-size: 0.6rem; font-weight: 800;
+      padding: 2px 7px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .rec-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: #e05555;
+      border-radius: 50%;
+      animation: rec-pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes rec-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    @media (max-width: 700px) {
+      .gif-grid { grid-template-columns: 1fr; }
+      .gif-card .gif-media { max-height: 400px; }
+    }
+
     /* FEATURE LIST */
     .feature-list {
       list-style: none; margin: 0; padding: 0;
@@ -284,6 +382,7 @@
       BluePunch
     </a>
     <div class="nav-links">
+      <a href="#demos" class="hide-mobile">Demos</a>
       <a href="#features" class="hide-mobile">Features</a>
       <a href="#comparison" class="hide-mobile">Comparison</a>
       <a href="#pricing" class="hide-mobile">Pricing</a>
@@ -321,6 +420,82 @@
         <img src="feature.png" alt="BluePunch app showing punch list items on a construction plan" />
       </div>
     </div>
+
+    <!-- GIF DEMOS -->
+    <section class="gif-section" id="demos">
+      <h2>See It In Action</h2>
+      <p>Quick demos of core workflows — straight from the app.</p>
+
+      <div class="gif-grid">
+
+        <!-- GIF 1: Creating a Punchlist -->
+        <div class="gif-card">
+          <div class="gif-media">
+            <img src="gifs/demo-punch-items.gif" alt="Creating a punchlist on a construction plan" />
+          </div>
+          <div class="gif-label">
+            <h3>Creating a Punchlist</h3>
+            <p>Tap anywhere on your PDF plan to drop numbered punch items, assign trades, and add notes.</p>
+          </div>
+        </div>
+
+        <!-- GIF 2: Area Takeoff & Export -->
+        <div class="gif-card">
+          <div class="gif-media">
+            <img src="gifs/demo-takeoff.gif" alt="Taking an area measurement and exporting results" />
+          </div>
+          <div class="gif-label">
+            <h3>Taking an Area Measurement & Exporting Results</h3>
+            <p>Outline rooms on your plan to calculate square footage, then export a professional report.</p>
+          </div>
+        </div>
+
+        <!-- GIF 3: Calibrating the Scale -->
+        <div class="gif-card">
+          <div class="gif-media">
+            <img src="gifs/demo-photo-markup.gif" alt="Calibrating the scale on a plan" />
+          </div>
+          <div class="gif-label">
+            <h3>Calibrating the Scale</h3>
+            <p>Set a known dimension on your plan so all takeoff measurements are accurate.</p>
+          </div>
+        </div>
+
+        <!-- GIF 4: Count Takeoff -->
+        <div class="gif-card">
+          <div class="gif-media">
+            <img src="gifs/demo-pdf-export.gif" alt="Counting objects with the count tool" />
+          </div>
+          <div class="gif-label">
+            <h3>Counting Objects with the Count Tool</h3>
+            <p>Tap to count fixtures, outlets, or any repeating item directly on your plan.</p>
+          </div>
+        </div>
+
+        <!-- GIF 5: Managing Entries -->
+        <div class="gif-card">
+          <div class="gif-media">
+            <img src="gifs/demo-takeoff-report.gif" alt="Using the entries tab to hide and manage entries" />
+          </div>
+          <div class="gif-label">
+            <h3>Using the Entries Tab to Hide Entries</h3>
+            <p>Toggle visibility of individual takeoff entries to keep your plan view clean and focused.</p>
+          </div>
+        </div>
+
+        <!-- GIF 6: Linear Measurements -->
+        <div class="gif-card">
+          <div class="gif-media">
+            <img src="gifs/demo-full-workflow.gif" alt="Taking linear measurements on a plan" />
+          </div>
+          <div class="gif-label">
+            <h3>Taking Linear Measurements</h3>
+            <p>Trace runs along walls, pipes, or conduit to get linear footage with automatic subtotals.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <!-- SCREENSHOTS -->
     <section id="screenshots">
